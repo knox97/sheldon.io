@@ -1,0 +1,269 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  min-height: 2350px;
+  overflow: hidden; }
+
+* {
+  transition: all 0.1s linear !important; }
+
+button {
+  background: rgba(0, 0, 0, 0.35);
+  color: #FFF;
+  cursor: pointer;
+  border: 1px solid #37456E;
+  padding: 10px;
+  font-weight: bold; }
+  button:hover {
+    border-color: #47557E; }
+  button:hover {
+    border-color: #27355E; }
+
+input, textarea {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid #222;
+  color: #FFF;
+  padding: 6px 8px; }
+
+::-webkit-scrollbar {
+  background: #111; }
+
+::-webkit-scrollbar-button {
+  background: #111; }
+
+::-webkit-scrollbar-track {
+  background: #111; }
+
+::-webkit-scrollbar-track-piece {
+  background: #111; }
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 10px;
+  border: 4px solid #111; }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #444; }
+  ::-webkit-scrollbar-thumb:active {
+    background: #333; }
+
+::-webkit-scrollbar-corner {
+  background: #111; }
+
+.fs-tree {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 20%;
+  height: 100%;
+  margin: 0;
+  background: #37456E;
+  color: #FFF; }
+  .fs-tree .header {
+    margin: 0;
+    padding: 4px 8px;
+    background: #222;
+    font-size: 1.35em;
+    font-weight: bold; }
+  .fs-tree .log-list {
+    margin: 0;
+    padding: 0;
+    display: block;
+    height: 100%;
+    width: 100%;
+    overflow-y: scroll; }
+    .fs-tree .log-list .log {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 6px 10px;
+      font-weight: bold;
+      border-bottom: 1px solid rgba(32, 32, 32, 0.35);
+      transition: all 0.1s linear; }
+      .fs-tree .log-list .log:hover {
+        background: rgba(0, 0, 0, 0.35);
+        cursor: pointer; }
+
+.io-settings {
+  position: fixed;
+  top: 0;
+  left: 20%;
+  width: 20%;
+  height: 100%;
+  margin: 0;
+  background: #333;
+  color: #FFF;
+  padding: 8px;
+  overflow-y: auto !important;
+  min-height: 10000px; }
+  .io-settings .header {
+    margin: 0;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 10px; }
+  .io-settings div input {
+    width: 100%; }
+  .io-settings .general {
+    text-align: center;
+    padding: 8px;
+    font-weight: bold; }
+    .io-settings .general h5 {
+      margin: 0;
+      padding-top: 8px; }
+    .io-settings .general .del {
+      margin-top: 16px;
+      width: 100%; }
+
+.io-main {
+  position: fixed;
+  top: 0;
+  left: 40%;
+  width: 60%;
+  height: 100%;
+  margin: 0;
+  background: #333;
+  color: #FFF;
+  border-left: 1px solid #222; }
+  .io-main .input {
+    padding-bottom: 4px;
+    width: 100%;
+    height: 10%;
+    margin: 0; }
+    .io-main .input textarea {
+      resize: none;
+      width: 100%;
+      height: 100%; }
+  .io-main .live-log {
+    margin: 0;
+    background: rgba(0, 0, 0, 0.35);
+    padding: 10px 0px 10px 6px;
+    position: fixed;
+    top: 10%;
+    left: 40%;
+    height: 90%;
+    width: 60%; }
+    .io-main .live-log .log-title {
+      font-weight: bold;
+      font-size: 1.2em;
+      padding: 6px; }
+    .io-main .live-log .list {
+      margin: 0;
+      display: block;
+      padding: 10px 0 0 0;
+      overflow-y: scroll;
+      height: 100%;
+      width: 100%; }
+      .io-main .live-log .list .log {
+        display: block;
+        width: 100%; }
+
+.init-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background: #222;
+  text-align: center;
+  color: #FFF;
+  transition: all 0.6s linear; }
+  .init-screen .bg {
+    max-width: 55vw;
+    max-height: 55vh; }
+  .init-screen .load {
+    margin-top: 16px; }
+
+.init-main {
+  position: fixed;
+  top: 0;
+  left: 20%;
+  width: 80%;
+  height: 100%;
+  margin: 0;
+  background: #333;
+  text-align: center; }
+  .init-main h1 {
+    color: #FFF;
+    font-size: 8vh;
+    font-weight: bold;
+    margin: 46vh 0 0 0;
+    padding: 0; }
+
+.slide-down {
+  opacity: 0;
+  padding: 3500px 0 !important; }
+
+.loading {
+  position: fixed;
+  top: 0;
+  left: 20%;
+  width: 80%;
+  height: 100%;
+  margin: 0;
+  background: rgba(0, 0, 0, 0.55);
+  text-align: center;
+  visibility: hidden; }
+  .loading img {
+    margin-top: 48vh;
+    left: 50%; }
+
+.disabled {
+  color: #999; }
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 24px;
+  margin: 0 5px; }
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #111;
+  -webkit-transition: 0.1s;
+  box-shadow: 0 0 1px #111;
+  transition: 0.1s; }
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.1s;
+  box-shadow: 0 0 1px #111;
+  transition: 0.1s; }
+
+input:checked + .slider {
+  background-color: #111; }
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #111; }
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(34px);
+  -ms-transform: translateX(34px);
+  transform: translateX(34px); }
+
+.slider.round {
+  border-radius: 34px; }
+
+.slider.round:before {
+  border-radius: 50%; }
+
+.effect {
+  font-size: 1.35em;
+  font-weight: bold;
+  text-shadow: 0px -10px 10px #FF0; }
+
+.selected-log {
+  background: rgba(0, 0, 0, 0.45) !important; }
+  .selected-log:hover, .selected-log:active {
+    background: rgba(0, 0, 0, 0.45) !important; }
+
+/*# sourceMappingURL=main.css.map */

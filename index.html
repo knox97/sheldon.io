@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Sheldon.io</title>
+    <script type="text/javascript">
+    	var $ = require('jquery');
+    </script>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="public/css/main.css">
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="http://code.responsivevoice.org/responsivevoice.js"></script>
+  </head>
+  <body>
+    <div class="fs-tree">
+      <div class="header">History of logs</div>  
+      <div class="log-list">
+        <!--<div class="log">Log #35</div>-->
+      </div>
+    </div>
+    <div class="io-settings">
+      <div class="header">Settings</div>
+      <div class="range"></div>
+      <div class="rain">
+      </div>
+      <div class="general">
+        Male
+        <label class="switch">
+          <input type="checkbox" id="voice-selected" checked="checked">
+          <div class="slider round"></div>
+        </label>
+        Female
+        <button class="del" onclick="deleteLog()"></button>
+      </div>
+    </div>
+    <div class="io-main">
+    <!--<img alt="Loading.." src="public/img/loading.gif">-->
+      <div class="input">
+        <textarea placeholder="What do you want to say?" id="tts-input"></textarea>
+      </div>
+      <div class="live-log">
+        <span class="log-title"></span>
+        <div class="list">
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="init-main">
+      <h1>Click log you wish to load</h1>
+    </div>
+
+
+
+    <div class="init-screen">
+      <h2>Inspired by The Big Bang Theory</h2>
+      <img src="public/img/init-bg.png" class="bg"><br/>
+      <img src="public/img/loading.gif" class="load">
+    </div>
+
+
+
+
+
+    
+
+
+
+
+
+
+
+    <div class="loading">
+      <img alt="Loading.." src="public/img/loading.gif">
+    </div>
+
+  <script type="text/javascript">
+    var Data = require('./models/file-system.js');
+    var sessionLogs = [];
+    var newNumber = 0;
+    var initLoad = true;
+    var firstLoad = true;
+
+    Data.getLogInfo(function(file) {
+      while (true) {
+        if (file.logList.indexOf(newNumber) == -1) {
+          file.logList.unshift(newNumber);
+          break;
+        }
+        newNumber += 1;
+      }
+      file = JSON.stringify(file,null,4);
+      Data.saveLogInfo(file, function(file) {
+        return true;
+      });
+      Data.createLog(`log_${newNumber}`, function(file) {
+        return true;
+      });
+      loadLogList();
+      loadLog(newNumber);
+      $('.log-title').html(`Log #${newNumber}`);
+    });
+
+    function loadLogList() {
+      $('.log-list').html('');
+      Data.getLogInfo(function(file) {
+        if (file.logList.length) {
+          file.logList.forEach(function(log_num) {
+            var html = `<div id="${log_num}" onclick="loadLog(this.id)" class="log">Log #${log_num}</div>`;
+            $('.log-list').append(html);
+          });
+        }
+        else
+          $('.log-list').html('<h4 style="text-align: center;"><em>No logs</em></h4>')
+      });
+    }
+
+    function loadLog(log_num) {
+      if (initLoad && firstLoad) {
+        $('.init-main').css('visibility', 'hidden');
+        initLoad = false;
+        firstLoad = false;
+      }
+      else if (initLoad && !firstLoad) {
+        loading('show');
+        $('.init-main').css('visibility', 'hidden');
+        initLoad = false;
+      }
+      else
+        loading('show');
+      $(`.log-list #${newNumber}`).removeClass('selected-log');
+      newNumber = log_num;
+      $(`.log-list #${newNumber}`).addClass('selected-log');
+      $('.del').text(`Delete Log #${newNumber}`);
+      $('.log-title').html(`Log #${newNumber}`);
+      Data.getLog(`log_${log_num}`, function(file) {
+        var list = $('.live-log .list');
+        list.html('');
+        if (file.logs.length)
+          file.logs.forEach(function(log) {
+            list.append(log);
+          });
+      });
+      setTimeout(function() {
+        if (!initLoad)
+          loading('hide');
+      }, 350);
+    }
+
+    function deleteLog() {
+      Data.deleteLog(`log_${newNumber}`, function() {
+        $('.init-main').css('visibility', 'visible');
+        initLoad = true;
+        loadLogList();
+      });
+    }
+
+    uiFix();
+
+    $(window).on('resize', function() {
+      uiFix();
+    });
+
+    function uiFix() {
+      // make fsTree height 100% - header and other stuff
+      var fsTree = $('.io-main').height() - $('.fs-tree .header').height();
+      $('.fs-tree .log-list').css('height', fsTree + 'px');
+      var logList = $('.io-main').height() - $('.io-main .input').height() - 2 - $('.live-log .log-title').height() - 20;
+      $('.live-log .list').css('height', logList + 'px');
+
+    }
+
+    function loading(status) {
+      if (status == 'hide') {
+        // hide a div
+        $('.loading').css('visibility', 'hidden');
+      }
+      else if (status == 'show') {
+        // show a div
+        $('.loading').css('visibility', 'visible');
+      }
+      else
+        alert('Error: invalid argument [loading]');
+    }
+  </script>
+
+    
+	<script type="text/javascript">
+  $(document).ready(function() {
+    setTimeout(function() {
+      $('.init-screen').addClass('slide-down');
+      setTimeout(function() {$('.init-screen').css('visibility', 'hidden');}, 600)
+    }, 2350);
+  });
+
+  $('#tts-input').on('keydown', function(e) {
+    var key = e.keyCode || e.which;
+    if (key == 13) {
+      e.preventDefault();
+      speechOutput();
+    }
+  });
+
+	function speechOutput() {
+    var input = $('#tts-input').val();
+		if(responsiveVoice.voiceSupport() && input) {
+      var voice = $('#voice-selected').is(':checked') ? "UK English Female" : "UK English Male";
+      $('#tts-input').attr('disabled', true);
+      $('#tts-input').addClass('disabled');
+			responsiveVoice.speak(input, voice, {
+        onend: function() {
+          $('#tts-input').attr('disabled', false);
+          $('#tts-input').removeClass('disabled');
+          $('#tts-input').val('');
+          var html = `<div class="log">
+            <span style="color: #999; font-weight: bold;">${dateNow()}: </span> ${input}
+          </div>`;
+          Data.getLog(`log_${newNumber}`, function(file) {
+            file.logs.unshift(html);
+            Data.saveLog(`log_${newNumber}`, file, function(file) {
+              return true;
+            });
+          });
+          $('.live-log .list').prepend(html);
+        }
+      });
+		}
+	}
+
+  function dateNow() {
+    var date = new Date();
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    var second = date.getSeconds();
+    var minute = date.getMinutes();
+    var hour = date.getHours();
+    if (month < 10)
+      month = '0' + month;
+    if (day < 10)
+      day = '0' + day;
+    if (hour < 10)
+      hour = '0' + hour;
+    if (minute < 10)
+      minute = '0' + minute;
+    if (second < 10)
+      second = '0' + second;
+    
+    var formatedDate = `${month}/${day}/${year} ${hour}:${minute}:${second}`;
+
+    return formatedDate;
+  }
+
+	</script>
+  </body>
+  <script>
+    /*
+	Frameless Window - make it
+	Make saveable logs to the local machine and then user can load them
+
+    */
+    // Pichka ti matherina  ahahahah rofl
+    // Ma-ma sto si dosadna
+    // re-tard-a
+    // odyebi
+
+    require('./renderer.js');
+
+    Object.keys(process.versions).forEach(function(software) {
+    	//document.write(`<b>${software}:</b> ${process.versions[software]} <span class="glyphicon glyphicon-remove"></span><br/>`);
+    });
+  </script>
+</html>
